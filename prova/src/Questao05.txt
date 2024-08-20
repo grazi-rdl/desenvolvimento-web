@@ -1,0 +1,55 @@
+O uso de Contexto permite que os dados sejam compartilhados entre os componentes 
+sem precisar passar props para cada nível de pai e filho. Com Contexto, é possível 
+criar um "contexto" que vai fornecer os dados de um componente para todos os componentes filhos.
+
+import React, { createContext, useContext, useState } from 'react'
+
+const ThemeContext = createContext()
+
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('dark')
+  
+  return (
+    <ThemeContext.Provider value={theme}>
+      {children}
+    </ThemeContext.Provider>
+  )
+}
+
+const useTheme = () => useContext(ThemeContext)
+
+const App = () => {
+  return (
+    <ThemeProvider>
+      <Header />
+    </ThemeProvider>
+  )
+}
+
+const Header = () => {
+  return (
+    <header>
+      <NavBar />
+    </header>
+  )
+}
+
+const NavBar = () => {
+  return (
+    <nav>
+      <Menu />
+    </nav>
+  )
+}
+
+const Menu = () => {
+  const theme = useTheme()
+  
+  return (
+    <div className={`menu ${theme}`}>
+      Menu Content
+    </div>
+  )
+}
+
+export default App
